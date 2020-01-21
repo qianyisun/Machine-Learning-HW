@@ -82,8 +82,8 @@ plot_psa_data()
 lines(x=x_grid, y=lin_pred, col = 'blue')  
 lines(x=x_grid, y=lin_pred1, col = 'red')
 lines(x=x_grid, y=lin_pred2, col = 'green')
-lines(x=x_grid, y=lin_pred3, col = 'orange')
-legend(-0.6, 4, legend = c("L1", "L2", "tau=0.25", "tau=0.75"), col=c("blue", "red", "green", "orange"), lty=1)
+lines(x=x_grid, y=lin_pred3, col = 'black')
+legend(-0.6, 4, legend = c("L1", "L2", "tau=0.25", "tau=0.75"), col=c("blue", "red", "green", "black"), lty=1)
 ```
 
 ![](Homework-1_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
@@ -133,8 +133,8 @@ plot_psa_data()
 lines(x=x_grid, y=nonlin_pred, col = 'blue')  
 lines(x=x_grid, y=nonlin_pred1, col = 'red')
 lines(x=x_grid, y=nonlin_pred2, col = 'green')
-lines(x=x_grid, y=nonlin_pred3, col = 'orange')
-legend(-0.6, 4, legend = c("L1", "L2", "tau=0.25", "tau=0.75"), col=c("blue", "red", "green", "orange"), lty=1)
+lines(x=x_grid, y=nonlin_pred3, col = 'black')
+legend(-0.6, 4, legend = c("L1", "L2", "tau=0.25", "tau=0.75"), col=c("blue", "red", "green", "black"), lty=1)
 ```
 
 ![](Homework-1_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
