@@ -20,8 +20,9 @@ library('glmnet')         ## for 'glmnet'
 data('prostate')
 cor(prostate)
 ```
-## split prostate into testing and training subsets
 
+
+# Split prostate into testing and training subsets
 ```{r}
 
 prostate_train <- prostate %>%
@@ -34,7 +35,7 @@ prostate_test <- prostate %>%
   filter(train == FALSE) %>% 
   select(-train)
 ```
-# fit the model
+# Fit the model
 ```{r}
 fit <- lm(lpsa ~ ., data=prostate_train)
 ```
@@ -55,7 +56,7 @@ error(prostate_test, fit)
 form  <- lpsa ~ 0 + lweight + age + lbph + lcp + pgg45 + lcavol + svi + gleason
 x_inp <- model.matrix(form, data=prostate_train)
 y_out <- prostate_train$lpsa
-fit <- glmnet(x=x_inp, y=y_out, lambda=seq(0.5, 0, -0.05))
+fit <- glmnet(x=x_inp, y=y_out, lambda=seq(0.5, 0, -0.05),alpha = 0)
 print(fit$beta)
 
 ```
@@ -74,11 +75,12 @@ for(i in 1:nrow(fit$beta)) {
 abline(h=0, lty=3, lwd=2)
 
 ```
+
 # Create a figure that shows the training and test error associated with ridge regression as a function of lambda
 ```{r}
 error <- function(dat, fit, lam, form, loss=L2_loss) {
   x_inp <- model.matrix(form, data=dat)
-  y_out <- dat$lcavol
+  y_out <- dat$lpsa
   y_hat <- predict(fit, newx=x_inp, s=lam)  ## see predict.elnet
   mean(loss(y_out, y_hat))
 }
