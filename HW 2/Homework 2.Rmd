@@ -18,7 +18,8 @@ library('glmnet')         ## for 'glmnet'
 
 ```{r}
 data('prostate')
-cor(prostate)
+
+cor(prostate%>% select(-lpsa,-train))
 ```
 
 
