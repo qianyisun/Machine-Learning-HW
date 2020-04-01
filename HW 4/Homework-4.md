@@ -86,19 +86,19 @@ randomForest(y ~ ., data = vowel.train)
     ##                      Number of trees: 500
     ## No. of variables tried at each split: 3
     ## 
-    ##         OOB estimate of  error rate: 2.08%
+    ##         OOB estimate of  error rate: 2.65%
     ## Confusion matrix:
     ##     1  2  3  4  5  6  7  8  9 10 11 class.error
     ## 1  48  0  0  0  0  0  0  0  0  0  0  0.00000000
-    ## 2   0 48  0  0  0  0  0  0  0  0  0  0.00000000
+    ## 2   1 47  0  0  0  0  0  0  0  0  0  0.02083333
     ## 3   0  0 48  0  0  0  0  0  0  0  0  0.00000000
     ## 4   0  0  0 47  0  1  0  0  0  0  0  0.02083333
-    ## 5   0  0  0  0 47  1  0  0  0  0  0  0.02083333
-    ## 6   0  0  0  0  0 44  0  0  0  0  4  0.08333333
-    ## 7   0  0  0  0  1  0 45  2  0  0  0  0.06250000
+    ## 5   0  0  0  0 45  2  0  0  0  0  1  0.06250000
+    ## 6   0  0  0  0  0 43  0  0  0  0  5  0.10416667
+    ## 7   0  0  0  0  1  0 46  1  0  0  0  0.04166667
     ## 8   0  0  0  0  0  0  0 48  0  0  0  0.00000000
     ## 9   0  0  0  0  0  0  1  0 47  0  0  0.02083333
-    ## 10  0  0  0  0  0  0  0  0  1 47  0  0.02083333
+    ## 10  0  0  0  0  0  0  1  0  0 47  0  0.02083333
     ## 11  0  0  0  0  0  0  0  0  0  0 48  0.00000000
 
 ``` r
@@ -197,4 +197,289 @@ cvknnreg <- function(kNN = 10, flds=vowel.train_flds) {
   }
   return(cverr)
 }
+cvknnreg()
 ```
+
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+    
+    ## Warning in pre_tst[count] <- predict(randomForest_fit, vowel.train_tst):
+    ## number of items to replace is not a multiple of replacement length
+
+    ##  [1] 27.09524 27.09524 27.09524 27.09524 27.09524 36.38095 27.09524
+    ##  [8] 27.09524 27.09524 27.09524 27.09524 36.38095 27.09524 27.09524
+    ## [15] 27.09524 27.09524 27.09524 27.09524 19.19231 19.19231 19.19231
+    ## [22] 19.19231 19.19231 19.19231 19.19231 19.19231 19.19231 19.19231
+    ## [29] 19.19231 19.19231 19.19231 19.19231 19.19231 19.19231 19.19231
+    ## [36] 19.19231 35.61321 35.61321 35.61321 35.61321 35.61321 35.61321
+    ## [43] 35.61321 35.61321 35.61321 35.61321 35.61321 35.61321 35.61321
+    ## [50] 35.61321 35.61321 35.61321 35.61321 35.61321 34.92523 34.92523
+    ## [57] 34.92523 34.92523 34.92523 34.92523 34.92523 34.92523 34.92523
+    ## [64] 34.92523 34.92523 34.92523 34.92523 34.92523 34.92523 34.92523
+    ## [71] 34.92523 34.92523 26.84906 26.84906 26.84906 26.84906 26.84906
+    ## [78] 19.66038 26.84906 26.84906 26.84906 26.84906 19.66038 19.66038
+    ## [85] 26.84906 26.84906 26.84906 26.84906 19.66038 19.66038

@@ -70,8 +70,10 @@ cvknnreg <- function(kNN = 10, flds=vowel.train_flds) {
   }
   return(cverr)
 }
+cvknnreg()
 
 ```
+
 
 
 
