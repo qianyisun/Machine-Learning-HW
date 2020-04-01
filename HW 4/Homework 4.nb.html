@@ -1749,21 +1749,230 @@ summary {
 
 
 <!-- rnb-text-begin -->
-<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a> Notebook. When you execute code within the notebook, the results appear beneath the code.</p>
-<p>Try executing this chunk by clicking the <em>Run</em> button within the chunk or by placing your cursor inside it and pressing <em>Cmd+Shift+Enter</em>.</p>
+<div id="load-dataset" class="section level1">
+<h1>Load dataset</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxvdChjYXJzKVxuYGBgIn0= -->
-<pre class="r"><code>plot(cars)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSgnRWxlbVN0YXRMZWFybicpXG5saWJyYXJ5KCdyYW5kb21Gb3Jlc3QnKVxuYGBgIn0= -->
+<pre class="r"><code>library('ElemStatLearn')
+library('randomForest')</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Add a new chunk by clicking the <em>Insert Chunk</em> button on the toolbar or by pressing <em>Cmd+Option+I</em>.</p>
-<p>When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the <em>Preview</em> button or press <em>Cmd+Shift+K</em> to preview the HTML file).</p>
-<p>The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike <em>Knit</em>, <em>Preview</em> does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.</p>
+</div>
+<div id="keep-y-column-in-int-type-for-further-calculation" class="section level1">
+<h1>keep y column in int type for further calculation</h1>
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudm93ZWwudHJhaW5faW50X3k8LXZvd2VsLnRyYWluXG5gYGAifQ== -->
+<pre class="r"><code>vowel.train_int_y&lt;-vowel.train</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>1.Convert the response variable in the “vowel.train” data frame to a factor variable prior to training, so that “randomForest” does classification rather than regression.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudm93ZWwudHJhaW4keVxuYGBgIn0= -->
+<pre class="r"><code>vowel.train$y</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICBbMV0gIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgMTAgMTEgIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgMTAgMTEgIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgMTAgMTEgIDEgIDIgIDMgIDRcbiBbMzhdICA1ICA2ICA3ICA4ICA5IDEwIDExICAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5IDEwIDExICAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5IDEwIDExICAxICAyICAzICA0ICA1ICA2ICA3ICA4XG4gWzc1XSAgOSAxMCAxMSAgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAxMCAxMSAgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAxMCAxMSAgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAxMCAxMSAgMVxuWzExMl0gIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgMTAgMTEgIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgMTAgMTEgIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgMTAgMTEgIDEgIDIgIDMgIDQgIDVcblsxNDldICA2ICA3ICA4ICA5IDEwIDExICAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5IDEwIDExICAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5IDEwIDExICAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5XG5bMTg2XSAxMCAxMSAgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAxMCAxMSAgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAxMCAxMSAgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAxMCAxMSAgMSAgMlxuWzIyM10gIDMgIDQgIDUgIDYgIDcgIDggIDkgMTAgMTEgIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgMTAgMTEgIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgMTAgMTEgIDEgIDIgIDMgIDQgIDUgIDZcblsyNjBdICA3ICA4ICA5IDEwIDExICAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5IDEwIDExICAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5IDEwIDExICAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5IDEwXG5bMjk3XSAxMSAgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAxMCAxMSAgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAxMCAxMSAgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAxMCAxMSAgMSAgMiAgM1xuWzMzNF0gIDQgIDUgIDYgIDcgIDggIDkgMTAgMTEgIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgMTAgMTEgIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgMTAgMTEgIDEgIDIgIDMgIDQgIDUgIDYgIDdcblszNzFdICA4ICA5IDEwIDExICAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5IDEwIDExICAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5IDEwIDExICAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5IDEwIDExXG5bNDA4XSAgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAxMCAxMSAgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAxMCAxMSAgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAxMCAxMSAgMSAgMiAgMyAgNFxuWzQ0NV0gIDUgIDYgIDcgIDggIDkgMTAgMTEgIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgMTAgMTEgIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgMTAgMTEgIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDhcbls0ODJdICA5IDEwIDExICAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5IDEwIDExICAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5IDEwIDExICAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5IDEwIDExICAxXG5bNTE5XSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAxMCAxMVxuIn0= -->
+<pre><code>  [1]  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4
+ [38]  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8
+ [75]  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1
+[112]  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5
+[149]  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9
+[186] 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2
+[223]  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6
+[260]  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10
+[297] 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3
+[334]  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7
+[371]  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11
+[408]  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4
+[445]  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8
+[482]  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1  2  3  4  5  6  7  8  9 10 11  1
+[519]  2  3  4  5  6  7  8  9 10 11</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudm93ZWwudHJhaW4keTwtIGFzLmZhY3Rvcih2b3dlbC50cmFpbiR5KVxuc3RyKHZvd2VsLnRyYWluKVxuYGBgIn0= -->
+<pre class="r"><code>vowel.train$y&lt;- as.factor(vowel.train$y)
+str(vowel.train)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiJ2RhdGEuZnJhbWUnOlx0NTI4IG9icy4gb2YgIDExIHZhcmlhYmxlczpcbiAkIHkgICA6IEZhY3RvciB3LyAxMSBsZXZlbHMgXCIxXCIsXCIyXCIsXCIzXCIsXCI0XCIsLi46IDEgMiAzIDQgNSA2IDcgOCA5IDEwIC4uLlxuICQgeC4xIDogbnVtICAtMy42NCAtMy4zMyAtMi4xMiAtMi4yOSAtMi42IC4uLlxuICQgeC4yIDogbnVtICAwLjQxOCAwLjQ5NiAwLjg5NCAxLjgwOSAxLjkzOCAuLi5cbiAkIHguMyA6IG51bSAgLTAuNjcgLTAuNjk0IC0xLjU3NiAtMS40OTggLTAuODQ2IC4uLlxuICQgeC40IDogbnVtICAxLjc3OSAxLjM2NSAwLjE0NyAxLjAxMiAxLjA2MiAuLi5cbiAkIHguNSA6IG51bSAgLTAuMTY4IC0wLjI2NSAtMC43MDcgLTEuMDUzIC0xLjYzMyAuLi5cbiAkIHguNiA6IG51bSAgMS42MjcgMS45MzMgMS41NTkgMS4wNiAwLjc2NCAuLi5cbiAkIHguNyA6IG51bSAgLTAuMzg4IC0wLjM2MyAtMC41NzkgLTAuNTY3IDAuMzk0IDAuMjE3IDAuMzIyIC0wLjQzNSAtMC41MTIgLTAuNDY2IC4uLlxuICQgeC44IDogbnVtICAwLjUyOSAwLjUxIDAuNjc2IDAuMjM1IC0wLjE1IC0wLjI0NiAwLjQ1IDAuOTkyIDAuOTI4IDAuNzAyIC4uLlxuICQgeC45IDogbnVtICAtMC44NzQgLTAuNjIxIC0wLjgwOSAtMC4wOTEgMC4yNzcgMC4yMzggMC4zNzcgMC41NzUgLTAuMTY3IDAuMDYgLi4uXG4gJCB4LjEwOiBudW0gIC0wLjgxNCAtMC40ODggLTAuMDQ5IC0wLjc5NSAtMC4zOTYgLTAuMzY1IC0wLjM2NiAtMC4zMDEgLTAuNDM0IC0wLjgzNiAuLi5cbiJ9 -->
+<pre><code>'data.frame':   528 obs. of  11 variables:
+ $ y   : Factor w/ 11 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
+ $ x.1 : num  -3.64 -3.33 -2.12 -2.29 -2.6 ...
+ $ x.2 : num  0.418 0.496 0.894 1.809 1.938 ...
+ $ x.3 : num  -0.67 -0.694 -1.576 -1.498 -0.846 ...
+ $ x.4 : num  1.779 1.365 0.147 1.012 1.062 ...
+ $ x.5 : num  -0.168 -0.265 -0.707 -1.053 -1.633 ...
+ $ x.6 : num  1.627 1.933 1.559 1.06 0.764 ...
+ $ x.7 : num  -0.388 -0.363 -0.579 -0.567 0.394 0.217 0.322 -0.435 -0.512 -0.466 ...
+ $ x.8 : num  0.529 0.51 0.676 0.235 -0.15 -0.246 0.45 0.992 0.928 0.702 ...
+ $ x.9 : num  -0.874 -0.621 -0.809 -0.091 0.277 0.238 0.377 0.575 -0.167 0.06 ...
+ $ x.10: num  -0.814 -0.488 -0.049 -0.795 -0.396 -0.365 -0.366 -0.301 -0.434 -0.836 ...</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>2.Review the documentation for the “randomForest” function. 3.Fit the random forest model to the vowel data using all of the 11 features using the default values of the tuning parameters.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmFuZG9tRm9yZXN0KHkgfiAuLCBkYXRhID0gdm93ZWwudHJhaW4pXG5gYGAifQ== -->
+<pre class="r"><code>randomForest(y ~ ., data = vowel.train)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxuIHJhbmRvbUZvcmVzdChmb3JtdWxhID0geSB+IC4sIGRhdGEgPSB2b3dlbC50cmFpbikgXG4gICAgICAgICAgICAgICBUeXBlIG9mIHJhbmRvbSBmb3Jlc3Q6IGNsYXNzaWZpY2F0aW9uXG4gICAgICAgICAgICAgICAgICAgICBOdW1iZXIgb2YgdHJlZXM6IDUwMFxuTm8uIG9mIHZhcmlhYmxlcyB0cmllZCBhdCBlYWNoIHNwbGl0OiAzXG5cbiAgICAgICAgT09CIGVzdGltYXRlIG9mICBlcnJvciByYXRlOiAyLjY1JVxuQ29uZnVzaW9uIG1hdHJpeDpcbiAgICAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5IDEwIDExIGNsYXNzLmVycm9yXG4xICA0OCAgMCAgMCAgMCAgMCAgMCAgMCAgMCAgMCAgMCAgMCAgMC4wMDAwMDAwMFxuMiAgIDAgNDggIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDAuMDAwMDAwMDBcbjMgICAwICAwIDQ4ICAwICAwICAwICAwICAwICAwICAwICAwICAwLjAwMDAwMDAwXG40ICAgMCAgMCAgMCA0NyAgMCAgMSAgMCAgMCAgMCAgMCAgMCAgMC4wMjA4MzMzM1xuNSAgIDAgIDAgIDAgIDAgNDYgIDEgIDAgIDAgIDAgIDAgIDEgIDAuMDQxNjY2NjdcbjYgICAwICAwICAwICAxICAwIDQ0ICAwICAwICAwICAwICAzICAwLjA4MzMzMzMzXG43ICAgMCAgMCAgMCAgMCAgMCAgMCA0NiAgMiAgMCAgMCAgMCAgMC4wNDE2NjY2N1xuOCAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgNDggIDAgIDAgIDAgIDAuMDAwMDAwMDBcbjkgICAwICAwICAwICAwICAwICAwICAxICAxIDQ0ICAxICAxICAwLjA4MzMzMzMzXG4xMCAgMCAgMCAgMCAgMCAgMCAgMCAgMSAgMCAgMCA0NyAgMCAgMC4wMjA4MzMzM1xuMTEgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgNDggIDAuMDAwMDAwMDBcbiJ9 -->
+<pre><code>
+Call:
+ randomForest(formula = y ~ ., data = vowel.train) 
+               Type of random forest: classification
+                     Number of trees: 500
+No. of variables tried at each split: 3
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKVGhpcyBpcyBhbiBbUiBNYXJrZG93bl0oaHR0cDovL3JtYXJrZG93bi5yc3R1ZGlvLmNvbSkgTm90ZWJvb2suIFdoZW4geW91IGV4ZWN1dGUgY29kZSB3aXRoaW4gdGhlIG5vdGVib29rLCB0aGUgcmVzdWx0cyBhcHBlYXIgYmVuZWF0aCB0aGUgY29kZS4gCgpUcnkgZXhlY3V0aW5nIHRoaXMgY2h1bmsgYnkgY2xpY2tpbmcgdGhlICpSdW4qIGJ1dHRvbiB3aXRoaW4gdGhlIGNodW5rIG9yIGJ5IHBsYWNpbmcgeW91ciBjdXJzb3IgaW5zaWRlIGl0IGFuZCBwcmVzc2luZyAqQ21kK1NoaWZ0K0VudGVyKi4gCgpgYGB7cn0KcGxvdChjYXJzKQpgYGAKCkFkZCBhIG5ldyBjaHVuayBieSBjbGlja2luZyB0aGUgKkluc2VydCBDaHVuayogYnV0dG9uIG9uIHRoZSB0b29sYmFyIG9yIGJ5IHByZXNzaW5nICpDbWQrT3B0aW9uK0kqLgoKV2hlbiB5b3Ugc2F2ZSB0aGUgbm90ZWJvb2ssIGFuIEhUTUwgZmlsZSBjb250YWluaW5nIHRoZSBjb2RlIGFuZCBvdXRwdXQgd2lsbCBiZSBzYXZlZCBhbG9uZ3NpZGUgaXQgKGNsaWNrIHRoZSAqUHJldmlldyogYnV0dG9uIG9yIHByZXNzICpDbWQrU2hpZnQrSyogdG8gcHJldmlldyB0aGUgSFRNTCBmaWxlKS4gCgpUaGUgcHJldmlldyBzaG93cyB5b3UgYSByZW5kZXJlZCBIVE1MIGNvcHkgb2YgdGhlIGNvbnRlbnRzIG9mIHRoZSBlZGl0b3IuIENvbnNlcXVlbnRseSwgdW5saWtlICpLbml0KiwgKlByZXZpZXcqIGRvZXMgbm90IHJ1biBhbnkgUiBjb2RlIGNodW5rcy4gSW5zdGVhZCwgdGhlIG91dHB1dCBvZiB0aGUgY2h1bmsgd2hlbiBpdCB3YXMgbGFzdCBydW4gaW4gdGhlIGVkaXRvciBpcyBkaXNwbGF5ZWQuCgo=</div>
+        OOB estimate of  error rate: 2.65%
+Confusion matrix:
+    1  2  3  4  5  6  7  8  9 10 11 class.error
+1  48  0  0  0  0  0  0  0  0  0  0  0.00000000
+2   0 48  0  0  0  0  0  0  0  0  0  0.00000000
+3   0  0 48  0  0  0  0  0  0  0  0  0.00000000
+4   0  0  0 47  0  1  0  0  0  0  0  0.02083333
+5   0  0  0  0 46  1  0  0  0  0  1  0.04166667
+6   0  0  0  1  0 44  0  0  0  0  3  0.08333333
+7   0  0  0  0  0  0 46  2  0  0  0  0.04166667
+8   0  0  0  0  0  0  0 48  0  0  0  0.00000000
+9   0  0  0  0  0  0  1  1 44  1  1  0.08333333
+10  0  0  0  0  0  0  1  0  0 47  0  0.02083333
+11  0  0  0  0  0  0  0  0  0  0 48  0.00000000</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSgnbWFuaXB1bGF0ZScpXG5saWJyYXJ5KCdzcGxpbmVzJykgIyMgJ25zJ1xubGlicmFyeSgnY2FyZXQnKVxuYGBgIn0= -->
+<pre class="r"><code>library('manipulate')
+library('splines') ## 'ns'
+library('caret')</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>4.Use 5-fold CV and tune the model by performing a grid search for the following tuning parameters: 1) the number of variables randomly sampled as candidates at each split; consider values 3, 4, and 5, and 2) the minimum size of terminal nodes; consider a sequence (1, 5, 10, 20, 40, and 80).</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyKHZvd2VsLnRyYWluX3RzdClcblxuYGBgIn0= -->
+<pre class="r"><code>str(vowel.train_tst)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiJ2RhdGEuZnJhbWUnOlx0MTA1IG9icy4gb2YgIDExIHZhcmlhYmxlczpcbiAkIHkgICA6IEZhY3RvciB3LyAxMSBsZXZlbHMgXCIxXCIsXCIyXCIsXCIzXCIsXCI0XCIsLi46IDIgOCAyIDcgOSAyIDUgNiAxMCA1IC4uLlxuICQgeC4xIDogbnVtICAtMy4zMyAtMy45NCAtMy4yNCAtMy41OCAtMy43OCAuLi5cbiAkIHguMiA6IG51bSAgMC40OTYgMi4zMDUgMC40MzYgMi4zNzQgMS45NzQgLi4uXG4gJCB4LjMgOiBudW0gIC0wLjY5NCAwLjEyNCAtMC44NiAtMC4zNTggLTEuMiAuLi5cbiAkIHguNCA6IG51bSAgMS4zNjUgMS43NzEgMS4zNjMgMS4xNjIgMC42MDYgLi4uXG4gJCB4LjUgOiBudW0gIC0wLjI2NSAtMS44MTUgLTAuMjUxIC0xLjk1MyAtMC42NSAuLi5cbiAkIHguNiA6IG51bSAgMS45MzMgMC41OTMgMS45MTUgMC42MjEgMS41MDQgLi4uXG4gJCB4LjcgOiBudW0gIC0wLjM2MyAtMC40MzUgLTAuMzk1IDAuMzM5IC0wLjEzNCAtMC4yMTUgLTAuMDcxIDAuNDQ4IC0wLjUxNiAtMC4yNzYgLi4uXG4gJCB4LjggOiBudW0gIDAuNTEgMC45OTIgMC43NTEgMC4zNTUgMC41MjggMC43MjMgMC4xMTggLTAuMzgyIDAuNzA3IDAuMTcyIC4uLlxuICQgeC45IDogbnVtICAtMC42MjEgMC41NzUgLTAuNzc0IDAuNDE1IDAuMzkyIC0wLjQ5MiAwLjEzOSAwLjIwNyAtMC4xNjkgLTAuMDA4IC4uLlxuICQgeC4xMDogbnVtICAtMC40ODggLTAuMzAxIC0wLjMyNyAtMC4yNTkgLTAuNTggLTAuNDI1IC0wLjY4NSAtMC40MDIgLTAuNTIyIC0wLjY0OSAuLi5cbiJ9 -->
+<pre><code>'data.frame':   105 obs. of  11 variables:
+ $ y   : Factor w/ 11 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 2 8 2 7 9 2 5 6 10 5 ...
+ $ x.1 : num  -3.33 -3.94 -3.24 -3.58 -3.78 ...
+ $ x.2 : num  0.496 2.305 0.436 2.374 1.974 ...
+ $ x.3 : num  -0.694 0.124 -0.86 -0.358 -1.2 ...
+ $ x.4 : num  1.365 1.771 1.363 1.162 0.606 ...
+ $ x.5 : num  -0.265 -1.815 -0.251 -1.953 -0.65 ...
+ $ x.6 : num  1.933 0.593 1.915 0.621 1.504 ...
+ $ x.7 : num  -0.363 -0.435 -0.395 0.339 -0.134 -0.215 -0.071 0.448 -0.516 -0.276 ...
+ $ x.8 : num  0.51 0.992 0.751 0.355 0.528 0.723 0.118 -0.382 0.707 0.172 ...
+ $ x.9 : num  -0.621 0.575 -0.774 0.415 0.392 -0.492 0.139 0.207 -0.169 -0.008 ...
+ $ x.10: num  -0.488 -0.301 -0.327 -0.259 -0.58 -0.425 -0.685 -0.402 -0.522 -0.649 ...</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYTwtYygxLCA1LCAxMCwgMjAsIDQwLCA4MClcbnByZV90c3Q8LSBOQVxuY291bnQgPC0gMFxuY3ZlcnI8LSBOQVxuIyMgNS1mb2xkIGNyb3NzLXZhbGlkYXRpb24gb2YgcmFuZG9tIGZvcmVzdCBtb2RlbFxuIyMgY3JlYXRlIGZpdmUgZm9sZHNcbnNldC5zZWVkKDE5ODUpXG52b3dlbC50cmFpbl9mbGRzICA8LSBjcmVhdGVGb2xkcyh2b3dlbC50cmFpbiR5LCBrPTUpXG52b3dlbC50cmFpbl9mbGRzX3Rlc3QgIDwtIGNyZWF0ZUZvbGRzKHZvd2VsLnRyYWluX2ludF95JHksIGs9NSlcbnN0cih2b3dlbC50cmFpbl9mbGRzKVxuYGBgIn0= -->
+<pre class="r"><code>a&lt;-c(1, 5, 10, 20, 40, 80)
+pre_tst&lt;- NA
+count &lt;- 0
+cverr&lt;- NA
+## 5-fold cross-validation of random forest model
+## create five folds
+set.seed(1985)
+vowel.train_flds  &lt;- createFolds(vowel.train$y, k=5)
+vowel.train_flds_test  &lt;- createFolds(vowel.train_int_y$y, k=5)
+str(vowel.train_flds)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiTGlzdCBvZiA1XG4gJCBGb2xkMTogaW50IFsxOjEwNV0gMiA4IDEzIDE4IDIwIDI0IDI3IDI4IDMyIDM4IC4uLlxuICQgRm9sZDI6IGludCBbMToxMDRdIDMgNCA3IDkgMTkgMjMgNDMgNDYgNDkgNjAgLi4uXG4gJCBGb2xkMzogaW50IFsxOjEwNl0gMTEgMTIgMTYgMTcgMjEgMzcgNDAgNDIgNDggNTAgLi4uXG4gJCBGb2xkNDogaW50IFsxOjEwN10gMSA1IDYgMTUgMjYgMjkgMzMgMzQgMzUgMzYgLi4uXG4gJCBGb2xkNTogaW50IFsxOjEwNl0gMTAgMTQgMjIgMjUgMzAgMzEgNDEgNDQgNTcgNTggLi4uXG4ifQ== -->
+<pre><code>List of 5
+ $ Fold1: int [1:105] 2 8 13 18 20 24 27 28 32 38 ...
+ $ Fold2: int [1:104] 3 4 7 9 19 23 43 46 49 60 ...
+ $ Fold3: int [1:106] 11 12 16 17 21 37 40 42 48 50 ...
+ $ Fold4: int [1:107] 1 5 6 15 26 29 33 34 35 36 ...
+ $ Fold5: int [1:106] 10 14 22 25 30 31 41 44 57 58 ...</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQodm93ZWwudHJhaW4keSlcbmBgYCJ9 -->
+<pre class="r"><code>print(vowel.train$y)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICBbMV0gMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAgMTAgMTEgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAgMTAgMTEgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAgMTAgMTEgMSAgMiAgMyBcbiBbMzddIDQgIDUgIDYgIDcgIDggIDkgIDEwIDExIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgIDEwIDExIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgIDEwIDExIDEgIDIgIDMgIDQgIDUgIDYgXG4gWzczXSA3ICA4ICA5ICAxMCAxMSAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5ICAxMCAxMSAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5ICAxMCAxMSAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5IFxuWzEwOV0gMTAgMTEgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAgMTAgMTEgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAgMTAgMTEgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAgMTAgMTEgMSBcblsxNDVdIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgIDEwIDExIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgIDEwIDExIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgIDEwIDExIDEgIDIgIDMgIDQgXG5bMTgxXSA1ICA2ICA3ICA4ICA5ICAxMCAxMSAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5ICAxMCAxMSAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5ICAxMCAxMSAxICAyICAzICA0ICA1ICA2ICA3IFxuWzIxN10gOCAgOSAgMTAgMTEgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAgMTAgMTEgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAgMTAgMTEgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAgMTBcblsyNTNdIDExIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgIDEwIDExIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgIDEwIDExIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgIDEwIDExIDEgIDIgXG5bMjg5XSAzICA0ICA1ICA2ICA3ICA4ICA5ICAxMCAxMSAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5ICAxMCAxMSAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5ICAxMCAxMSAxICAyICAzICA0ICA1IFxuWzMyNV0gNiAgNyAgOCAgOSAgMTAgMTEgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAgMTAgMTEgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAgMTAgMTEgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCBcblszNjFdIDkgIDEwIDExIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgIDEwIDExIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgIDEwIDExIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgIDEwIDExXG5bMzk3XSAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5ICAxMCAxMSAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5ICAxMCAxMSAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5ICAxMCAxMSAxICAyICAzIFxuWzQzM10gNCAgNSAgNiAgNyAgOCAgOSAgMTAgMTEgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAgMTAgMTEgMSAgMiAgMyAgNCAgNSAgNiAgNyAgOCAgOSAgMTAgMTEgMSAgMiAgMyAgNCAgNSAgNiBcbls0NjldIDcgIDggIDkgIDEwIDExIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgIDEwIDExIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgIDEwIDExIDEgIDIgIDMgIDQgIDUgIDYgIDcgIDggIDkgXG5bNTA1XSAxMCAxMSAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5ICAxMCAxMSAxICAyICAzICA0ICA1ICA2ICA3ICA4ICA5ICAxMCAxMVxuTGV2ZWxzOiAxIDIgMyA0IDUgNiA3IDggOSAxMCAxMVxuIn0= -->
+<pre><code>  [1] 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3 
+ [37] 4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6 
+ [73] 7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9 
+[109] 10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1 
+[145] 2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4 
+[181] 5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7 
+[217] 8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10
+[253] 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2 
+[289] 3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5 
+[325] 6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8 
+[361] 9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11
+[397] 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3 
+[433] 4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6 
+[469] 7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9 
+[505] 10 11 1  2  3  4  5  6  7  8  9  10 11 1  2  3  4  5  6  7  8  9  10 11
+Levels: 1 2 3 4 5 6 7 8 9 10 11</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY3Zrbm5yZWcgPC0gZnVuY3Rpb24oa05OID0gMTAsIGZsZHM9dm93ZWwudHJhaW5fZmxkcykge1xuICBmb3IodHN0X2lkeCBpbiAxOmxlbmd0aChmbGRzKSkgeyAjIyBmb3IgZWFjaCBmb2xkXG4gICAgXG4gICAgIyMgZ2V0IHRyYWluaW5nIGFuZCB0ZXN0aW5nIGRhdGFcbiAgICB2b3dlbC50cmFpbl90cm4gPC0gdm93ZWwudHJhaW5bLWZsZHNbW3RzdF9pZHhdXSxdXG4gICAgdm93ZWwudHJhaW5fdHN0IDwtIHZvd2VsLnRyYWluWyBmbGRzW1t0c3RfaWR4XV0sXVxuICAgIHZvd2VsLnRyYWluX3RzdCR5PC1hcy5pbnRlZ2VyKHZvd2VsLnRyYWluX3RzdCR5KVxuICAgIFxuICAgICMjIGZpdCByYW5kb20gZm9yZXN0IG1vZGVsIHRvIHRyYWluaW5nIGRhdGEgYW5kIHR1cm4gdGhlIG1vZGVsXG4gICAgZm9yIChpIGluIDM6NSl7XG4gICAgICBmb3IgKGogaW4gYSApe1xuICAgICAgICBjb3VudCA9IGNvdW50ICsxXG4gICAgcmFuZG9tRm9yZXN0X2ZpdCA8LSByYW5kb21Gb3Jlc3QoeSB+IC4sIGRhdGEgPSB2b3dlbC50cmFpbixtdHJ5ID0gaSwgbm9kZXNpemU9ailcbiAgICBcbiAgICAgICAgIyMgY29tcHV0ZSB0ZXN0IGVycm9yIG9uIHRlc3RpbmcgZGF0YVxuICAgIHByZV90c3RbY291bnRdIDwtIHByZWRpY3QocmFuZG9tRm9yZXN0X2ZpdCwgdm93ZWwudHJhaW5fdHN0KVxuICAgIHByZV90c3RbY291bnRdPC1hcy5pbnRlZ2VyKHByZV90c3RbY291bnRdKVxuICAgIGN2ZXJyW2NvdW50XSA8LSBtZWFuKCh2b3dlbC50cmFpbl90c3QkeSAtIHByZV90c3RbY291bnRdKV4yKVxuICAgICAgfVxuICAgIH1cbiAgfVxuICByZXR1cm4oY3ZlcnIpXG59XG5jdmtubnJlZygpXG5gYGAifQ== -->
+<pre class="r"><code>cvknnreg &lt;- function(kNN = 10, flds=vowel.train_flds) {
+  for(tst_idx in 1:length(flds)) { ## for each fold
+    
+    ## get training and testing data
+    vowel.train_trn &lt;- vowel.train[-flds[[tst_idx]],]
+    vowel.train_tst &lt;- vowel.train[ flds[[tst_idx]],]
+    vowel.train_tst$y&lt;-as.integer(vowel.train_tst$y)
+    
+    ## fit random forest model to training data and turn the model
+    for (i in 3:5){
+      for (j in a ){
+        count = count +1
+    randomForest_fit &lt;- randomForest(y ~ ., data = vowel.train,mtry = i, nodesize=j)
+    
+        ## compute test error on testing data
+    pre_tst[count] &lt;- predict(randomForest_fit, vowel.train_tst)
+    pre_tst[count]&lt;-as.integer(pre_tst[count])
+    cverr[count] &lt;- mean((vowel.train_tst$y - pre_tst[count])^2)
+      }
+    }
+  }
+  return(cverr)
+}
+cvknnreg()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoibnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RobnVtYmVyIG9mIGl0ZW1zIHRvIHJlcGxhY2UgaXMgbm90IGEgbXVsdGlwbGUgb2YgcmVwbGFjZW1lbnQgbGVuZ3RoXG4ifQ== -->
+<pre><code>number of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement lengthnumber of items to replace is not a multiple of replacement length</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSAyNy4wOTUyNCAyNy4wOTUyNCAyNy4wOTUyNCAyNy4wOTUyNCAyNy4wOTUyNCAzNi4zODA5NSAyNy4wOTUyNCAyNy4wOTUyNCAyNy4wOTUyNCAyNy4wOTUyNCAyNy4wOTUyNCAzNi4zODA5NVxuWzEzXSAyNy4wOTUyNCAyNy4wOTUyNCAyNy4wOTUyNCAyNy4wOTUyNCAyNy4wOTUyNCAyNy4wOTUyNCAxOS4xOTIzMSAxOS4xOTIzMSAxOS4xOTIzMSAxOS4xOTIzMSAxOS4xOTIzMSAxOS4xOTIzMVxuWzI1XSAxOS4xOTIzMSAxOS4xOTIzMSAxOS4xOTIzMSAxOS4xOTIzMSAxOS4xOTIzMSAxOS4xOTIzMSAxOS4xOTIzMSAxOS4xOTIzMSAxOS4xOTIzMSAxOS4xOTIzMSAxOS4xOTIzMSAxOS4xOTIzMVxuWzM3XSAzNS42MTMyMSAzNS42MTMyMSAzNS42MTMyMSAzNS42MTMyMSAzNS42MTMyMSAzNS42MTMyMSAzNS42MTMyMSAzNS42MTMyMSAzNS42MTMyMSAzNS42MTMyMSAzNS42MTMyMSAzNS42MTMyMVxuWzQ5XSAzNS42MTMyMSAzNS42MTMyMSAzNS42MTMyMSAzNS42MTMyMSAzNS42MTMyMSAzNS42MTMyMSAzNC45MjUyMyAzNC45MjUyMyAzNC45MjUyMyAzNC45MjUyMyAzNC45MjUyMyAzNC45MjUyM1xuWzYxXSAzNC45MjUyMyAzNC45MjUyMyAzNC45MjUyMyAzNC45MjUyMyAzNC45MjUyMyAzNC45MjUyMyAzNC45MjUyMyAzNC45MjUyMyAzNC45MjUyMyAzNC45MjUyMyAzNC45MjUyMyAzNC45MjUyM1xuWzczXSAyNi44NDkwNiAyNi44NDkwNiAyNi44NDkwNiAyNi44NDkwNiAyNi44NDkwNiAxOS42NjAzOCAyNi44NDkwNiAyNi44NDkwNiAyNi44NDkwNiAyNi44NDkwNiAxOS42NjAzOCAxOS42NjAzOFxuWzg1XSAyNi44NDkwNiAyNi44NDkwNiAyNi44NDkwNiAyNi44NDkwNiAxOS42NjAzOCAxOS42NjAzOFxuIn0= -->
+<pre><code> [1] 27.09524 27.09524 27.09524 27.09524 27.09524 36.38095 27.09524 27.09524 27.09524 27.09524 27.09524 36.38095
+[13] 27.09524 27.09524 27.09524 27.09524 27.09524 27.09524 19.19231 19.19231 19.19231 19.19231 19.19231 19.19231
+[25] 19.19231 19.19231 19.19231 19.19231 19.19231 19.19231 19.19231 19.19231 19.19231 19.19231 19.19231 19.19231
+[37] 35.61321 35.61321 35.61321 35.61321 35.61321 35.61321 35.61321 35.61321 35.61321 35.61321 35.61321 35.61321
+[49] 35.61321 35.61321 35.61321 35.61321 35.61321 35.61321 34.92523 34.92523 34.92523 34.92523 34.92523 34.92523
+[61] 34.92523 34.92523 34.92523 34.92523 34.92523 34.92523 34.92523 34.92523 34.92523 34.92523 34.92523 34.92523
+[73] 26.84906 26.84906 26.84906 26.84906 26.84906 19.66038 26.84906 26.84906 26.84906 26.84906 19.66038 19.66038
+[85] 26.84906 26.84906 26.84906 26.84906 19.66038 19.66038</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMgQ29tcHV0ZSA1LWZvbGQgQ1YgZm9yIGtOTiA9IDE6MjBcbiNjdmVycnMgPC0gc2FwcGx5KDE6MjAsIGN2a25ucmVnKVxucHJpbnQoY3ZlcnJzKSAjIyByb3dzIGFyZSBrLWZvbGRzICgxOjUpLCBjb2xzIGFyZSBrTk4gKDE6MjApXG5gYGAifQ== -->
+<pre class="r"><code>## Compute 5-fold CV for kNN = 1:20
+#cverrs &lt;- sapply(1:20, cvknnreg)
+print(cverrs) ## rows are k-folds (1:5), cols are kNN (1:20)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gcHJpbnQoY3ZlcnJzKSA6IG9iamVjdCAnY3ZlcnJzJyBub3QgZm91bmRcbiJ9 -->
+<pre><code>Error in print(cverrs) : object 'cverrs' not found</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+</div>
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyBMb2FkIGRhdGFzZXQKYGBge3J9CmxpYnJhcnkoJ0VsZW1TdGF0TGVhcm4nKQpsaWJyYXJ5KCdyYW5kb21Gb3Jlc3QnKQpgYGAKIyBrZWVwIHkgY29sdW1uIGluIGludCB0eXBlIGZvciBmdXJ0aGVyIGNhbGN1bGF0aW9uCmBgYHtyfQp2b3dlbC50cmFpbl9pbnRfeTwtdm93ZWwudHJhaW4KYGBgCjEuQ29udmVydCB0aGUgcmVzcG9uc2UgdmFyaWFibGUgaW4gdGhlIOKAnHZvd2VsLnRyYWlu4oCdIGRhdGEgZnJhbWUgdG8gYSBmYWN0b3IgdmFyaWFibGUgcHJpb3IgdG8gdHJhaW5pbmcsIHNvIHRoYXQg4oCccmFuZG9tRm9yZXN04oCdIGRvZXMgY2xhc3NpZmljYXRpb24gcmF0aGVyIHRoYW4gcmVncmVzc2lvbi4KYGBge3J9CnZvd2VsLnRyYWluJHkKdm93ZWwudHJhaW4keTwtIGFzLmZhY3Rvcih2b3dlbC50cmFpbiR5KQpzdHIodm93ZWwudHJhaW4pCmBgYAoKMi5SZXZpZXcgdGhlIGRvY3VtZW50YXRpb24gZm9yIHRoZSDigJxyYW5kb21Gb3Jlc3TigJ0gZnVuY3Rpb24uCjMuRml0IHRoZSByYW5kb20gZm9yZXN0IG1vZGVsIHRvIHRoZSB2b3dlbCBkYXRhIHVzaW5nIGFsbCBvZiB0aGUgMTEgZmVhdHVyZXMgdXNpbmcgdGhlIGRlZmF1bHQgdmFsdWVzIG9mIHRoZSB0dW5pbmcgcGFyYW1ldGVycy4KYGBge3J9CnJhbmRvbUZvcmVzdCh5IH4gLiwgZGF0YSA9IHZvd2VsLnRyYWluKQpgYGAKYGBge3J9CmxpYnJhcnkoJ21hbmlwdWxhdGUnKQpsaWJyYXJ5KCdzcGxpbmVzJykgIyMgJ25zJwpsaWJyYXJ5KCdjYXJldCcpCmBgYAo0LlVzZSA1LWZvbGQgQ1YgYW5kIHR1bmUgdGhlIG1vZGVsIGJ5IHBlcmZvcm1pbmcgYSBncmlkIHNlYXJjaCBmb3IgdGhlIGZvbGxvd2luZyB0dW5pbmcgcGFyYW1ldGVyczogMSkgdGhlIG51bWJlciBvZiB2YXJpYWJsZXMgcmFuZG9tbHkgc2FtcGxlZCBhcyBjYW5kaWRhdGVzIGF0IGVhY2ggc3BsaXQ7IGNvbnNpZGVyIHZhbHVlcyAzLCA0LCBhbmQgNSwgYW5kIDIpIHRoZSBtaW5pbXVtIHNpemUgb2YgdGVybWluYWwgbm9kZXM7IGNvbnNpZGVyIGEgc2VxdWVuY2UgKDEsIDUsIDEwLCAyMCwgNDAsIGFuZCA4MCkuCmBgYHtyfQphPC1jKDEsIDUsIDEwLCAyMCwgNDAsIDgwKQpmb3IoaSBpbiBhKXsKICBpCn0KaQoKcmFuZG9tRm9yZXN0X2ZpdDwtcmFuZG9tRm9yZXN0KHkgfiAuLCBkYXRhID0gdm93ZWwudHJhaW4sbXRyeSA9IDMsIG5vZGVzaXplPTEwKQoKc3RyKHJhbmRvbUZvcmVzdF9maXQpCnJhbmRvbUZvcmVzdCh5IH4gLiwgZGF0YSA9IHZvd2VsLnRyYWluLG10cnkgPSBpLCBub2Rlc2l6ZT1qKQpzdHIocmFuZG9tRm9yZXN0X2ZpdCR5KQp2b3dlbC50cmFpbl9mbGRzWzFdCnN0cih2b3dlbC50cmFpbl9mbGRzKQpsZW5ndGgodm93ZWwudHJhaW5fZmxkcykKdm93ZWwudHJhaW5fdHN0IDwtIHZvd2VsLnRyYWluW3Zvd2VsLnRyYWluX2ZsZHNbWzFdXSxdCnZvd2VsLnRyYWluX3RzdApzdHIocHJlZGljdChyYW5kb21Gb3Jlc3RfZml0LCB2b3dlbC50cmFpbl90c3QpKQoKcmFuZG9tRm9yZXN0X2ZpdCR5PC1hcy5pbnRlZ2VyKHJhbmRvbUZvcmVzdF9maXQkeSkKc3RyKGN2ZXJyKQpzdHIodm93ZWwudHJhaW5fdHN0KQpgYGAKCmBgYHtyfQphPC1jKDEsIDUsIDEwLCAyMCwgNDAsIDgwKQpwcmVfdHN0PC0gTkEKY291bnQgPC0gMApjdmVycjwtIE5BCiMjIDUtZm9sZCBjcm9zcy12YWxpZGF0aW9uIG9mIHJhbmRvbSBmb3Jlc3QgbW9kZWwKIyMgY3JlYXRlIGZpdmUgZm9sZHMKc2V0LnNlZWQoMTk4NSkKdm93ZWwudHJhaW5fZmxkcyAgPC0gY3JlYXRlRm9sZHModm93ZWwudHJhaW4keSwgaz01KQp2b3dlbC50cmFpbl9mbGRzX3Rlc3QgIDwtIGNyZWF0ZUZvbGRzKHZvd2VsLnRyYWluX2ludF95JHksIGs9NSkKc3RyKHZvd2VsLnRyYWluX2ZsZHMpCnByaW50KHZvd2VsLnRyYWluJHkpCgpjdmtubnJlZyA8LSBmdW5jdGlvbihrTk4gPSAxMCwgZmxkcz12b3dlbC50cmFpbl9mbGRzKSB7CiAgZm9yKHRzdF9pZHggaW4gMTpsZW5ndGgoZmxkcykpIHsgIyMgZm9yIGVhY2ggZm9sZAogICAgCiAgICAjIyBnZXQgdHJhaW5pbmcgYW5kIHRlc3RpbmcgZGF0YQogICAgdm93ZWwudHJhaW5fdHJuIDwtIHZvd2VsLnRyYWluWy1mbGRzW1t0c3RfaWR4XV0sXQogICAgdm93ZWwudHJhaW5fdHN0IDwtIHZvd2VsLnRyYWluWyBmbGRzW1t0c3RfaWR4XV0sXQogICAgdm93ZWwudHJhaW5fdHN0JHk8LWFzLmludGVnZXIodm93ZWwudHJhaW5fdHN0JHkpCiAgICAKICAgICMjIGZpdCByYW5kb20gZm9yZXN0IG1vZGVsIHRvIHRyYWluaW5nIGRhdGEgYW5kIHR1cm4gdGhlIG1vZGVsCiAgICBmb3IgKGkgaW4gMzo1KXsKICAgICAgZm9yIChqIGluIGEgKXsKICAgICAgICBjb3VudCA9IGNvdW50ICsxCiAgICByYW5kb21Gb3Jlc3RfZml0IDwtIHJhbmRvbUZvcmVzdCh5IH4gLiwgZGF0YSA9IHZvd2VsLnRyYWluLG10cnkgPSBpLCBub2Rlc2l6ZT1qKQogICAgCiAgICAgICAgIyMgY29tcHV0ZSB0ZXN0IGVycm9yIG9uIHRlc3RpbmcgZGF0YQogICAgcHJlX3RzdFtjb3VudF0gPC0gcHJlZGljdChyYW5kb21Gb3Jlc3RfZml0LCB2b3dlbC50cmFpbl90c3QpCiAgICBwcmVfdHN0W2NvdW50XTwtYXMuaW50ZWdlcihwcmVfdHN0W2NvdW50XSkKICAgIGN2ZXJyW2NvdW50XSA8LSBtZWFuKCh2b3dlbC50cmFpbl90c3QkeSAtIHByZV90c3RbY291bnRdKV4yKQogICAgICB9CiAgICB9CiAgfQogIHJldHVybihjdmVycikKfQpjdmtubnJlZygpCmBgYAoKYGBge3J9CiMjIENvbXB1dGUgNS1mb2xkIENWIGZvciBrTk4gPSAxOjIwCiNjdmVycnMgPC0gc2FwcGx5KDE6MjAsIGN2a25ucmVnKQpwcmludChjdmVycnMpICMjIHJvd3MgYXJlIGstZm9sZHMgKDE6NSksIGNvbHMgYXJlIGtOTiAoMToyMCkKY3ZlcnJzX21lYW4gPC0gYXBwbHkoY3ZlcnJzLCAyLCBtZWFuKQpjdmVycnNfc2QgICA8LSBhcHBseShjdmVycnMsIDIsIHNkKQoKIyMgUGxvdCB0aGUgcmVzdWx0cyBvZiA1LWZvbGQgQ1YgZm9yIGtOTiA9IDE6MjAKcGxvdCh4PTE6MjAsIHk9Y3ZlcnJzX21lYW4sIAogICAgIHlsaW09cmFuZ2UoY3ZlcnJzKSwKICAgICB4bGFiPSInaycgaW4ga05OIiwgeWxhYj0iQ1YgRXN0aW1hdGUgb2YgVGVzdCBFcnJvciIpCnNlZ21lbnRzKHgwPTE6MjAsIHgxPTE6MjAsCiAgICAgICAgIHkwPWN2ZXJyc19tZWFuLWN2ZXJyc19zZCwKICAgICAgICAgeTE9Y3ZlcnJzX21lYW4rY3ZlcnJzX3NkKQpiZXN0X2lkeCA8LSB3aGljaC5taW4oY3ZlcnJzX21lYW4pCnBvaW50cyh4PWJlc3RfaWR4LCB5PWN2ZXJyc19tZWFuW2Jlc3RfaWR4XSwgcGNoPTIwKQphYmxpbmUoaD1jdmVycnNfbWVhbltiZXN0X2lkeF0gKyBjdmVycnNfc2RbYmVzdF9pZHhdLCBsdHk9MykKYGBgCgoK</div>
 
 
 

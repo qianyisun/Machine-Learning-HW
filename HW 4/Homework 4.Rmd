@@ -1,19 +1,78 @@
 ---
-title: "R Notebook"
-output: html_notebook
+title: "Homework 4"
+author: Qianyi Sun
+date: April 1st, 2020
+output: github_document
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
-
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
-
+# Load dataset
 ```{r}
-plot(cars)
+library('ElemStatLearn')
+library('randomForest')
+```
+# keep y column in int type for further calculation
+```{r}
+vowel.train_int_y<-vowel.train
+```
+1.Convert the response variable in the “vowel.train” data frame to a factor variable prior to training, so that “randomForest” does classification rather than regression.
+```{r}
+vowel.train$y
+vowel.train$y<- as.factor(vowel.train$y)
+str(vowel.train)
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+2.Review the documentation for the “randomForest” function.
+3.Fit the random forest model to the vowel data using all of the 11 features using the default values of the tuning parameters.
+```{r}
+randomForest(y ~ ., data = vowel.train)
+```
+```{r}
+library('manipulate')
+library('splines') ## 'ns'
+library('caret')
+```
+4.Use 5-fold CV and tune the model by performing a grid search for the following tuning parameters: 1) the number of variables randomly sampled as candidates at each split; consider values 3, 4, and 5, and 2) the minimum size of terminal nodes; consider a sequence (1, 5, 10, 20, 40, and 80).
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+```{r}
+a<-c(1, 5, 10, 20, 40, 80)
+pre_tst<- NA
+count <- 0
+cverr<- NA
+## 5-fold cross-validation of random forest model
+## create five folds
+set.seed(1985)
+vowel.train_flds  <- createFolds(vowel.train$y, k=5)
+vowel.train_flds_test  <- createFolds(vowel.train_int_y$y, k=5)
+str(vowel.train_flds)
+print(vowel.train$y)
+
+cvknnreg <- function(kNN = 10, flds=vowel.train_flds) {
+  for(tst_idx in 1:length(flds)) { ## for each fold
+    
+    ## get training and testing data
+    vowel.train_trn <- vowel.train[-flds[[tst_idx]],]
+    vowel.train_tst <- vowel.train[ flds[[tst_idx]],]
+    vowel.train_tst$y<-as.integer(vowel.train_tst$y)
+    
+    ## fit random forest model to training data and turn the model
+    for (i in 3:5){
+      for (j in a ){
+        count = count +1
+    randomForest_fit <- randomForest(y ~ ., data = vowel.train,mtry = i, nodesize=j)
+    
+        ## compute test error on testing data
+    pre_tst[count] <- predict(randomForest_fit, vowel.train_tst)
+    pre_tst[count]<-as.integer(pre_tst[count])
+    cverr[count] <- mean((vowel.train_tst$y - pre_tst[count])^2)
+      }
+    }
+  }
+  return(cverr)
+}
+
+```
+
+
+
 
