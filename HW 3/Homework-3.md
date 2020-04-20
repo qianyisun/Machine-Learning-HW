@@ -4,12 +4,51 @@ Qianyi Sun
 March 19, 2020
 
 ``` r
+library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
+library(tidyverse)
+```
+
+    ## ── Attaching packages ───────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+
+    ## ✔ ggplot2 3.2.1     ✔ readr   1.3.1
+    ## ✔ tibble  2.1.3     ✔ purrr   0.3.2
+    ## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
+    ## ✔ ggplot2 3.2.1     ✔ forcats 0.4.0
+
+    ## ── Conflicts ──────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+
+``` r
 library('MASS') ## for 'mcycle'
+```
+
+    ## 
+    ## Attaching package: 'MASS'
+
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     select
+
+``` r
 library('manipulate') ## for 'manipulate'
 ```
 
-Randomly split the mcycle data into training (75%) and validation (25%)
-subsets.
+# Randomly split the mcycle data into training (75%) and validation (25%) subsets.
 
 ``` r
 set.seed(101) # Set Seed so that same sample can be reproduced in future also
@@ -17,19 +56,19 @@ set.seed(101) # Set Seed so that same sample can be reproduced in future also
 sample <- sample.int(n = nrow(mcycle), size = floor(.75*nrow(mcycle)), replace = F)
 train <- mcycle[sample, ]
 test  <- mcycle[-sample, ]
+
+
+train_y <- train$accel
+train_x <- matrix(train$times, length(train$times), 1)
+test_y <- test$accel
+test_x <- matrix(test$times, length(test$times), 1)
 ```
 
-Using the mcycle data, consider predicting the mean acceleration as a
-function of time. Use the Nadaraya-Watson method with the k-NN kernel
-function to create a series of prediction models by varying the tuning
-parameter over a sequence of values.
+# Using the mcycle data, consider predicting the mean acceleration as a function of time. Use the Nadaraya-Watson method with the k-NN kernel function to create a series of prediction models by varying the tuning parameter over a sequence of values.
 
 ``` r
-y <- train$accel
-x <- matrix(train$times, length(train$times), 1)
-
-y_test <- test$accel
-x_test <- matrix(test$times, length(test$times), 1)
+# create input
+x_plot <- matrix(seq(min(train_x),max(train_x),length.out=100),100,1)
 ```
 
 ``` r
@@ -81,38 +120,14 @@ effective_df <- function(y, x, kern, ...) {
                            kern=kern, ...)
   sum(diag(attr(y_hat, 'k')))
 }
-```
 
-make predictions using NW method at training inputs
-
-``` r
-y_hat <- nadaraya_watson(y, x, x,kern=kernel_k_nearest_neighbors, k=2)
-edf <- effective_df(y, x, 
- kern=kernel_k_nearest_neighbors, k=2)
-```
-
-``` r
-y_hat <- nadaraya_watson(y, x, x,kern=kernel_k_nearest_neighbors, k=3)
-edf <- effective_df(y, x, 
- kern=kernel_k_nearest_neighbors, k=3)
-```
-
-``` r
-y_hat_test <- nadaraya_watson(y, x, x_test,kern=kernel_k_nearest_neighbors, k=3)
-```
-
-With the squared-error loss function, compute and plot the training
-error, AIC, BIC, and validation error (using the validation data) as
-functions of the tuning parameter.
-
-``` r
 ## loss function
 ## y    - train/test y
 ## yhat - predictions at train/test x
 loss_squared_error <- function(y, yhat)
   (y - yhat)^2
 
-## train error
+## train/test error
 ## y    - train/test y
 ## yhat - predictions at train x
 ## loss - loss function
@@ -136,32 +151,85 @@ bic <- function(y, yhat, d)
   error(y, yhat) + log(length(y))/length(y)*d
 ```
 
-# 
-
 ``` r
-train_error<-error(y,y_hat)
-test_error<-error(y_test,y_hat_test)
-AIC<-aic(y, y_hat, edf)
-BIC<-bic(y, y_hat, edf)
-
-## create a grid of inputs 
-x_plot <- matrix(seq(min(x),max(x),length.out=100),100,1)
-
-## make predictions using NW method at each of grid points
-y_hat_plot <- nadaraya_watson(y, x, x_plot,
-                              kern=kernel_k_nearest_neighbors, k=3)
-
-plot(x, y, xlab="Time (ms)", ylab="Acceleration (g)")
-legend('topright', legend = c(
-paste0('aic = ', round(AIC, 1)),
-paste0('bic = ', round(BIC, 1)),
-paste0('train_error = ', round(train_error, 1)),
-paste0('test_error = ', round(test_error, 1))),
- bty='n')
-lines(x_plot, y_hat_plot, col="#882255", lwd=2) 
+## create sequence to store the training error, AIC, BIC, and validation error
+AIC <- rep(NA, 50)
+BIC <- rep(NA, 50)
+train_error <- rep(NA, 50)
+test_error <- rep(NA, 50)
 ```
 
-![](Homework-3_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+# make predictions using NW method at training inputs
+
+``` r
+for(i in seq(1,50,1)){
+  y_hat_train <- nadaraya_watson(train_y, train_x, train_x, kern = kernel_k_nearest_neighbors, k=i)
+  y_hat_valid <- nadaraya_watson(train_y, train_x, test_x, kern = kernel_k_nearest_neighbors, k = i)
+  edf <- effective_df(train_y, train_x, kern = kernel_k_nearest_neighbors, k = i)
+  train_error[i] <- error(train_y, yhat = y_hat_train)
+  AIC[i] <- aic(train_y, yhat = y_hat_train, d = edf)
+  BIC[i] <- bic(train_y, yhat = y_hat_train, d = edf)
+  test_error[i] <- error(test_y, yhat = y_hat_valid)
+}
+```
+
+With the squared-error loss function, compute and plot the training
+error, AIC, BIC, and validation error (using the validation data) as
+functions of the tuning
+parameter.
+
+``` r
+## plot the training and test errors, along with AIC and BIC, as a function of the tuning parameter k.
+plot(train_error,type="b",xlab= 'K',ylab='Train error, test error, aic and bic')
+lines(test_error,type="b",col="red") 
+lines(AIC,type="b",col="green")
+lines(BIC,type="b",col="blue")
+legend('top', c('Train Error','Test Error','AIC','BIC'),col=c('black','red','green','blue'), bty='n',lty=2, pch=19)
+```
+
+![](Homework-3_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+``` r
+train_error
+```
+
+    ##  [1]  197.0458  182.7003  237.8585  274.1274  297.8374  314.9512  337.4763
+    ##  [8]  349.7686  355.0846  361.9940  376.3778  395.2653  394.1047  399.7880
+    ## [15]  419.8674  450.0747  478.8419  482.2701  500.6563  540.7163  565.2597
+    ## [22]  623.9051  634.6575  659.5560  699.3450  744.9348  774.9235  826.2934
+    ## [29]  861.7973  890.9974  946.0631  984.2076 1028.6073 1057.1037 1094.9272
+    ## [36] 1121.8554 1161.1494 1189.6427 1241.0124 1282.2374 1335.1060 1379.2239
+    ## [43] 1428.4497 1498.5750 1551.2841 1595.5394 1656.0280 1721.0339 1777.6307
+    ## [50] 1827.2283
+
+``` r
+AIC
+```
+
+    ##  [1]  198.6215  183.6598  238.5252  274.6274  298.2374  315.2846  337.7620
+    ##  [8]  350.0186  355.3068  362.1940  376.5596  395.4320  394.2585  399.9308
+    ## [15]  420.0007  450.1997  478.9595  482.3813  500.7616  540.8163  565.3550
+    ## [22]  623.9960  634.7445  659.6393  699.4250  745.0117  774.9976  826.3648
+    ## [29]  861.8663  891.0641  946.1277  984.2701 1028.6679 1057.1625 1094.9844
+    ## [36] 1121.9110 1161.2034 1189.6954 1241.0637 1282.2874 1335.1548 1379.2716
+    ## [43] 1428.4963 1498.6205 1551.3285 1595.5829 1656.0705 1721.0756 1777.6715
+    ## [50] 1827.2683
+
+``` r
+BIC
+```
+
+    ##  [1]  200.6662  184.9050  239.3902  275.2762  298.7564  315.7171  338.1328
+    ##  [8]  350.3430  355.5952  362.4535  376.7955  395.6482  394.4582  400.1162
+    ## [15]  420.1737  450.3619  479.1122  482.5254  500.8982  540.9460  565.4786
+    ## [22]  624.1139  634.8573  659.7475  699.5288  745.1115  775.0937  826.4575
+    ## [29]  861.9558  891.1506  946.2114  984.3512 1028.7466 1057.2388 1095.0585
+    ## [36] 1121.9831 1161.2736 1189.7637 1241.1302 1282.3523 1335.2181 1379.3333
+    ## [43] 1428.5566 1498.6795 1551.3862 1595.6393 1656.1257 1721.1297 1777.7245
+    ## [50] 1827.3202
+
+By oberserving the train\_error,AIC and BIC, we can know that the three
+values are so approaching thus its lines are overlapped.
 
 ``` r
 library('manipulate')
@@ -171,7 +239,12 @@ library('caret')
 
     ## Loading required package: lattice
 
-    ## Loading required package: ggplot2
+    ## 
+    ## Attaching package: 'caret'
+
+    ## The following object is masked from 'package:purrr':
+    ## 
+    ##     lift
 
 For each value of the tuning parameter, Perform 5-fold cross-validation
 using the combined training and validation data. This results in 5
@@ -206,7 +279,7 @@ print(mcycle_flds)
     ## [18]  95 100 103 105 111 112 114 120 133
 
 ``` r
-sapply(mcycle_flds, length)  ## not all the same length
+sapply(mcycle_flds, length)
 ```
 
     ## Fold1 Fold2 Fold3 Fold4 Fold5 
@@ -233,16 +306,10 @@ cvknnreg <- function(kNN = 10, flds=mcycle_flds) {
 }
 ```
 
-Plot the CV-estimated test error (average of the five estimates from
-each fold) as a function of the tuning parameter. Add vertical line
-segments to the figure (using the segments function in R) that represent
-one “standard error” of the CV-estimated test error (standard deviation
-of the five estimates from each fold).
-
 ``` r
-## Compute 5-fold CV for kNN = 1:20
-cverrs <- sapply(1:20, cvknnreg)
-print(cverrs) ## rows are k-folds (1:5), cols are kNN (1:20)
+## Compute 5-fold CV for kNN = 1:25
+cverrs <- sapply(1:25, cvknnreg)
+print(cverrs)
 ```
 
     ##           [,1]      [,2]      [,3]      [,4]      [,5]     [,6]     [,7]
@@ -257,22 +324,30 @@ print(cverrs) ## rows are k-folds (1:5), cols are kNN (1:20)
     ## [3,] 665.1589 684.4300 707.7291 699.0208 723.3589 726.6567 696.9062
     ## [4,] 773.0690 753.5173 732.2657 693.2659 707.9107 712.3221 680.9196
     ## [5,] 654.7812 582.7061 580.6095 591.8443 580.9938 586.1192 588.1546
-    ##         [,15]    [,16]    [,17]    [,18]    [,19]    [,20]
-    ## [1,] 948.6905 923.3845 940.7557 996.8310 952.1598 965.4597
-    ## [2,] 374.1702 382.4026 405.5556 419.2063 417.0465 417.9231
-    ## [3,] 714.1368 767.9444 755.3994 754.1490 781.4413 868.3828
-    ## [4,] 676.9464 678.1938 684.7731 737.2583 773.9589 840.3452
-    ## [5,] 575.1274 600.3366 618.1128 656.5049 666.6291 688.6101
+    ##         [,15]    [,16]    [,17]    [,18]    [,19]    [,20]     [,21]
+    ## [1,] 948.6905 923.3845 940.7557 996.8310 952.1598 965.4597 1003.9442
+    ## [2,] 374.1702 382.4026 405.5556 419.2063 417.0465 417.9231  406.0370
+    ## [3,] 714.1368 767.9444 755.3994 754.1490 781.4413 868.3828  880.4458
+    ## [4,] 676.9464 678.1938 684.7731 737.2583 773.9589 840.3452  868.7858
+    ## [5,] 575.1274 600.3366 618.1128 656.5049 666.6291 688.6101  725.1959
+    ##          [,22]     [,23]     [,24]     [,25]
+    ## [1,] 1030.3948 1064.6790 1041.7612 1059.5064
+    ## [2,]  434.7237  503.5738  517.2852  510.8153
+    ## [3,]  893.5272  940.0699  947.8386  976.8820
+    ## [4,]  923.7878  958.2058  978.4419 1001.0530
+    ## [5,]  744.0833  799.1230  838.6625  860.4817
+
+# Plot the CV-estimated test error (average of the five estimates from each fold) as a function of the tuning parameter.
 
 ``` r
 cverrs_mean <- apply(cverrs, 2, mean)
 cverrs_sd   <- apply(cverrs, 2, sd)
 
 ## Plot the results of 5-fold CV for kNN = 1:20
-plot(x=1:20, y=cverrs_mean, 
+plot(x=1:25, y=cverrs_mean, 
      ylim=range(cverrs),
      xlab="'k' in kNN", ylab="CV Estimate of Test Error")
-segments(x0=1:20, x1=1:20,
+segments(x0=1:25, x1=1:25,
          y0=cverrs_mean-cverrs_sd,
          y1=cverrs_mean+cverrs_sd)
 best_idx <- which.min(cverrs_mean)
@@ -282,13 +357,14 @@ abline(h=cverrs_mean[best_idx] + cverrs_sd[best_idx], lty=3)
 
 ![](Homework-3_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
-erpret the resulting figures and select a suitable value for the tuning
-parameter.
+# Interpret the resulting figures and select a suitable value for the tuning parameter.
 
-We can find that with the increase of ‘k’ in kNN, the CV-estimated test
-error, to some extent, decreases. When k is 14, the CV-estimated test
-error is minimal. However, with the increase of ‘k’ in kNN, the model’s
-bias is increased and its variance is decreased. Thus, for trade\_off
-prinpal, k is 10 that might be a suitable value for the tuning
-parameter. Because when k is 10, the model complexity is not so high and
-its test error is small.
+We all know that as k increases, the bias of the estimator will also
+increase and its variance will decrease. From the graph, we can find
+that when ‘k’ in kNN is between 1 and 14 with the increase of ‘k’ in
+kNN, the CV-estimated test error, to some extent, decreases. I think the
+good choice will be the minimal test error. Thus when k = 14, that might
+be a good choice. But if we want to decide the k value by “one standard
+error” rule, I think another suitable value will be 22 for k value. The
+one standard error can help us find a model which can perfrom well in
+different test dataset if we randomly choose.

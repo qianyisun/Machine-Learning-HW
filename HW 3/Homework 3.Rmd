@@ -6,29 +6,37 @@ output: github_document
 ---
 
 
-
 ```{r}
+library(dplyr)
+library(tidyverse)
 library('MASS') ## for 'mcycle'
 library('manipulate') ## for 'manipulate'
 ```
 
-Randomly split the mcycle data into training (75%) and validation (25%) subsets.
+# Randomly split the mcycle data into training (75%) and validation (25%) subsets.
 ```{r}
 set.seed(101) # Set Seed so that same sample can be reproduced in future also
 # Now Selecting 75% of data as sample from total 'n' rows of the data  
 sample <- sample.int(n = nrow(mcycle), size = floor(.75*nrow(mcycle)), replace = F)
 train <- mcycle[sample, ]
 test  <- mcycle[-sample, ]
+
+
+train_y <- train$accel
+train_x <- matrix(train$times, length(train$times), 1)
+test_y <- test$accel
+test_x <- matrix(test$times, length(test$times), 1)
 ```
 
-Using the mcycle data, consider predicting the mean acceleration as a function of time. Use the Nadaraya-Watson method with the k-NN kernel function to create a series of prediction models by varying the tuning parameter over a sequence of values.
+
+
+# Using the mcycle data, consider predicting the mean acceleration as a function of time. Use the Nadaraya-Watson method with the k-NN kernel function to create a series of prediction models by varying the tuning parameter over a sequence of values.
+
 ```{r}
-y <- train$accel
-x <- matrix(train$times, length(train$times), 1)
-
-y_test <- test$accel
-x_test <- matrix(test$times, length(test$times), 1)
+# create input
+x_plot <- matrix(seq(min(train_x),max(train_x),length.out=100),100,1)
 ```
+
 
 ```{r}
 ## k-NN kernel function
@@ -79,37 +87,14 @@ effective_df <- function(y, x, kern, ...) {
                            kern=kern, ...)
   sum(diag(attr(y_hat, 'k')))
 }
-```
 
- make predictions using NW method at training inputs
-```{r}
-
-y_hat <- nadaraya_watson(y, x, x,kern=kernel_k_nearest_neighbors, k=2)
-edf <- effective_df(y, x, 
- kern=kernel_k_nearest_neighbors, k=2)
-
-```
-```{r}
-y_hat <- nadaraya_watson(y, x, x,kern=kernel_k_nearest_neighbors, k=3)
-edf <- effective_df(y, x, 
- kern=kernel_k_nearest_neighbors, k=3)
-```
-
-```{r}
-y_hat_test <- nadaraya_watson(y, x, x_test,kern=kernel_k_nearest_neighbors, k=3)
-
-```
-
-With the squared-error loss function, compute and plot the training error, AIC, BIC, and validation error (using the validation data) as functions of the tuning parameter.
-
-```{r}
 ## loss function
 ## y    - train/test y
 ## yhat - predictions at train/test x
 loss_squared_error <- function(y, yhat)
   (y - yhat)^2
 
-## train error
+## train/test error
 ## y    - train/test y
 ## yhat - predictions at train x
 ## loss - loss function
@@ -132,33 +117,60 @@ aic <- function(y, yhat, d)
 bic <- function(y, yhat, d)
   error(y, yhat) + log(length(y))/length(y)*d
 
+
+
+
 ```
 
-# 
+
+```{r}
+## create sequence to store the training error, AIC, BIC, and validation error
+AIC <- rep(NA, 50)
+BIC <- rep(NA, 50)
+train_error <- rep(NA, 50)
+test_error <- rep(NA, 50)
+```
+
+
+# make predictions using NW method at training inputs
+```{r}
+for(i in seq(1,50,1)){
+  y_hat_train <- nadaraya_watson(train_y, train_x, train_x, kern = kernel_k_nearest_neighbors, k=i)
+  y_hat_valid <- nadaraya_watson(train_y, train_x, test_x, kern = kernel_k_nearest_neighbors, k = i)
+  edf <- effective_df(train_y, train_x, kern = kernel_k_nearest_neighbors, k = i)
+  train_error[i] <- error(train_y, yhat = y_hat_train)
+  AIC[i] <- aic(train_y, yhat = y_hat_train, d = edf)
+  BIC[i] <- bic(train_y, yhat = y_hat_train, d = edf)
+  test_error[i] <- error(test_y, yhat = y_hat_valid)
+}
+
+
+```
+
+With the squared-error loss function, compute and plot the training error, AIC, BIC, and validation error (using the validation data) as functions of the tuning parameter.
 ```{r}
 
-train_error<-error(y,y_hat)
-test_error<-error(y_test,y_hat_test)
-AIC<-aic(y, y_hat, edf)
-BIC<-bic(y, y_hat, edf)
-
-## create a grid of inputs 
-x_plot <- matrix(seq(min(x),max(x),length.out=100),100,1)
-
-## make predictions using NW method at each of grid points
-y_hat_plot <- nadaraya_watson(y, x, x_plot,
-                              kern=kernel_k_nearest_neighbors, k=3)
-
-plot(x, y, xlab="Time (ms)", ylab="Acceleration (g)")
-legend('topright', legend = c(
-paste0('aic = ', round(AIC, 1)),
-paste0('bic = ', round(BIC, 1)),
-paste0('train_error = ', round(train_error, 1)),
-paste0('test_error = ', round(test_error, 1))),
- bty='n')
-lines(x_plot, y_hat_plot, col="#882255", lwd=2) 
+## plot the training and test errors, along with AIC and BIC, as a function of the tuning parameter k.
+plot(train_error,type="b",xlab= 'K',ylab='Train error, test error, aic and bic')
+lines(test_error,type="b",col="red") 
+lines(AIC,type="b",col="green")
+lines(BIC,type="b",col="blue")
+legend('top', c('Train Error','Test Error','AIC','BIC'),col=c('black','red','green','blue'), bty='n',lty=2, pch=19)
 
 ```
+
+```{r}
+train_error
+AIC
+BIC
+```
+By oberserving the train_error,AIC and BIC, we can know that the three values are so approaching thus its lines are overlapped.
+
+
+
+
+
+
 
 ```{r}
 library('manipulate')
@@ -170,13 +182,14 @@ library('caret')
 For each value of the tuning parameter, Perform 5-fold cross-validation using the combined training and validation data. This results in 5 estimates of test error per tuning parameter value.
 
 ```{r}
-
 ## 5-fold cross-validation of knnreg model
 ## create five folds
 set.seed(1985)
 mcycle_flds  <- createFolds(mcycle$accel, k=5)
 print(mcycle_flds)
-sapply(mcycle_flds, length)  ## not all the same length
+
+
+sapply(mcycle_flds, length)
 
 cvknnreg <- function(kNN = 10, flds=mcycle_flds) {
   cverr <- rep(NA, length(flds))
@@ -197,20 +210,24 @@ cvknnreg <- function(kNN = 10, flds=mcycle_flds) {
   return(cverr)
 }
 ```
-Plot the CV-estimated test error (average of the five estimates from each fold) as a function of the tuning parameter. Add vertical line segments to the figure (using the segments function in R) that represent one “standard error” of the CV-estimated test error (standard deviation of the five estimates from each fold).
-
 ```{r}
-## Compute 5-fold CV for kNN = 1:20
-cverrs <- sapply(1:20, cvknnreg)
-print(cverrs) ## rows are k-folds (1:5), cols are kNN (1:20)
+## Compute 5-fold CV for kNN = 1:25
+cverrs <- sapply(1:25, cvknnreg)
+print(cverrs)
+```
+
+
+
+# Plot the CV-estimated test error (average of the five estimates from each fold) as a function of the tuning parameter.
+```{r}
 cverrs_mean <- apply(cverrs, 2, mean)
 cverrs_sd   <- apply(cverrs, 2, sd)
 
 ## Plot the results of 5-fold CV for kNN = 1:20
-plot(x=1:20, y=cverrs_mean, 
+plot(x=1:25, y=cverrs_mean, 
      ylim=range(cverrs),
      xlab="'k' in kNN", ylab="CV Estimate of Test Error")
-segments(x0=1:20, x1=1:20,
+segments(x0=1:25, x1=1:25,
          y0=cverrs_mean-cverrs_sd,
          y1=cverrs_mean+cverrs_sd)
 best_idx <- which.min(cverrs_mean)
@@ -218,8 +235,9 @@ points(x=best_idx, y=cverrs_mean[best_idx], pch=20)
 abline(h=cverrs_mean[best_idx] + cverrs_sd[best_idx], lty=3)
 ```
 
-erpret the resulting figures and select a suitable value for the tuning parameter.
 
-We can find that with the increase of 'k' in kNN, the CV-estimated test error, to some extent, decreases. When k is 14, the CV-estimated test error is minimal. However, with the increase of 'k' in kNN, the model's bias is increased and its variance is decreased. Thus, for trade_off prinpal, k is 10 that might be a suitable value for the tuning parameter. Because when k is 10, the model complexity is not so high and its test error is small.
+
+# Interpret the resulting figures and select a suitable value for the tuning parameter.
+We all know that as k increases, the bias of the estimator will also increase and its variance will decrease. From the graph, we can find that when 'k' in kNN is between 1 and 14 with the increase of 'k' in kNN, the CV-estimated test error, to some extent, decreases. I think the good choice will be the minimal test error. Thus  when k = 14, that might be a good choice. But if we want to decide the k value by "one standard error" rule, I think another suitable value will be 22 for k value. The one standard error can help us find a model which can perfrom well in different test dataset if we randomly choose.
 
 
