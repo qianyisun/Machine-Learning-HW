@@ -48,7 +48,7 @@ library('MASS') ## for 'mcycle'
 library('manipulate') ## for 'manipulate'
 ```
 
-# Randomly split the mcycle data into training (75%) and validation (25%) subsets.
+## Randomly split the mcycle data into training (75%) and validation (25%) subsets.
 
 ``` r
 set.seed(101) # Set Seed so that same sample can be reproduced in future also
@@ -64,7 +64,7 @@ test_y <- test$accel
 test_x <- matrix(test$times, length(test$times), 1)
 ```
 
-# Using the mcycle data, consider predicting the mean acceleration as a function of time. Use the Nadaraya-Watson method with the k-NN kernel function to create a series of prediction models by varying the tuning parameter over a sequence of values.
+## Using the mcycle data, consider predicting the mean acceleration as a function of time. Use the Nadaraya-Watson method with the k-NN kernel function to create a series of prediction models by varying the tuning parameter over a sequence of values.
 
 ``` r
 # create input
@@ -159,7 +159,7 @@ train_error <- rep(NA, 50)
 test_error <- rep(NA, 50)
 ```
 
-# make predictions using NW method at training inputs
+## make predictions using NW method at training inputs.With the squared-error loss function, compute and plot the training error, AIC, BIC, and validation error (using the validation data) as functions of the tuning parameter.
 
 ``` r
 for(i in seq(1,50,1)){
@@ -172,11 +172,6 @@ for(i in seq(1,50,1)){
   test_error[i] <- error(test_y, yhat = y_hat_valid)
 }
 ```
-
-With the squared-error loss function, compute and plot the training
-error, AIC, BIC, and validation error (using the validation data) as
-functions of the tuning
-parameter.
 
 ``` r
 ## plot the training and test errors, along with AIC and BIC, as a function of the tuning parameter k.
@@ -246,9 +241,7 @@ library('caret')
     ## 
     ##     lift
 
-For each value of the tuning parameter, Perform 5-fold cross-validation
-using the combined training and validation data. This results in 5
-estimates of test error per tuning parameter value.
+## For each value of the tuning parameter, Perform 5-fold cross-validation using the combined training and validation data. This results in 5 estimates of test error per tuning parameter value.
 
 ``` r
 ## 5-fold cross-validation of knnreg model
@@ -337,7 +330,7 @@ print(cverrs)
     ## [4,]  923.7878  958.2058  978.4419 1001.0530
     ## [5,]  744.0833  799.1230  838.6625  860.4817
 
-# Plot the CV-estimated test error (average of the five estimates from each fold) as a function of the tuning parameter.
+## Plot the CV-estimated test error (average of the five estimates from each fold) as a function of the tuning parameter.
 
 ``` r
 cverrs_mean <- apply(cverrs, 2, mean)
@@ -357,7 +350,7 @@ abline(h=cverrs_mean[best_idx] + cverrs_sd[best_idx], lty=3)
 
 ![](Homework-3_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
-# Interpret the resulting figures and select a suitable value for the tuning parameter.
+## Interpret the resulting figures and select a suitable value for the tuning parameter.
 
 We all know that as k increases, the bias of the estimator will also
 increase and its variance will decrease. From the graph, we can find
