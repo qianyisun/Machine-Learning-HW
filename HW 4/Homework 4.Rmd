@@ -5,75 +5,94 @@ date: April 1st, 2020
 output: github_document
 ---
 
-# Load dataset
+##Load dataset
 ```{r}
 library('ElemStatLearn')
 library('randomForest')
-```
-# keep y column in int type for further calculation
-```{r}
-vowel.train_int_y<-vowel.train
-```
-1.Convert the response variable in the “vowel.train” data frame to a factor variable prior to training, so that “randomForest” does classification rather than regression.
-```{r}
-vowel.train$y
-vowel.train$y<- as.factor(vowel.train$y)
-str(vowel.train)
-```
-
-2.Review the documentation for the “randomForest” function.
-3.Fit the random forest model to the vowel data using all of the 11 features using the default values of the tuning parameters.
-```{r}
-randomForest(y ~ ., data = vowel.train)
-```
-```{r}
 library('manipulate')
 library('splines') ## 'ns'
 library('caret')
 ```
-4.Use 5-fold CV and tune the model by performing a grid search for the following tuning parameters: 1) the number of variables randomly sampled as candidates at each split; consider values 3, 4, and 5, and 2) the minimum size of terminal nodes; consider a sequence (1, 5, 10, 20, 40, and 80).
+
+## 1.Convert the response variable in the “vowel.train” data frame to a factor variable prior to training, so that “randomForest” does classification rather than regression.
+```{r}
+vowel.train$y<- as.factor(vowel.train$y)
+
+```
+
+## 2.Review the documentation for the “randomForest” function.
+
+```{r}
+?randomForest
+```
+
+## 3.Fit the random forest model to the vowel data using all of the 11 features using the default values of the tuning parameters.
+```{r}
+randomForest(y ~ ., data = vowel.train)
+```
+
+
+## 4.Use 5-fold CV and tune the model by performing a grid search for the following tuning parameters: 1) the number of variables randomly sampled as candidates at each split; consider values 3, 4, and 5, and 2) the minimum size of terminal nodes; consider a sequence (1, 5, 10, 20, 40, and 80).
 
 
 ```{r}
 a<-c(1, 5, 10, 20, 40, 80)
 pre_tst<- NA
-count <- 0
 cverr<- NA
 ## 5-fold cross-validation of random forest model
 ## create five folds
 set.seed(1985)
 vowel.train_flds  <- createFolds(vowel.train$y, k=5)
-vowel.train_flds_test  <- createFolds(vowel.train_int_y$y, k=5)
-str(vowel.train_flds)
-print(vowel.train$y)
+df_flds<-vowel.train_flds
 
-cvknnreg <- function(kNN = 10, flds=vowel.train_flds) {
-  for(tst_idx in 1:length(flds)) { ## for each fold
-    
-    ## get training and testing data
-    vowel.train_trn <- vowel.train[-flds[[tst_idx]],]
-    vowel.train_tst <- vowel.train[ flds[[tst_idx]],]
-    vowel.train_tst$y<-as.integer(vowel.train_tst$y)
+cverr_min = 1 #intial value and the cverr will not more than 1
+optimal_mtry = 0
+optimal_nodesize = 0
     
     ## fit random forest model to training data and turn the model
     for (i in 3:5){
       for (j in a ){
-        count = count +1
-    randomForest_fit <- randomForest(y ~ ., data = vowel.train,mtry = i, nodesize=j)
+        
+    #  5-fold cross-validation
+    cverr <- rep(NA, length(df_flds))
+        
+    for(tst_idx in 1:length(df_flds)) {
+
+     ## get training and testing data
+   train_trn <- vowel.train[-df_flds[[tst_idx]],]
+   train_tst <- vowel.train[ df_flds[[tst_idx]],]
+    randomForest_fit <- randomForest(y ~ ., data = train_trn,mtry = i, nodesize=j)
+    pre_tst <- predict(randomForest_fit, train_tst[,2:11])
+
+    classerror <- ifelse(train_tst$y != pre_tst, FALSE, TRUE)
     
-        ## compute test error on testing data
-    pre_tst[count] <- predict(randomForest_fit, vowel.train_tst)
-    pre_tst[count]<-as.integer(pre_tst[count])
-    cverr[count] <- mean((vowel.train_tst$y - pre_tst[count])^2)
-      }
+    cverr[tst_idx] <- sum(classerror == FALSE) / length(classerror)
+    
     }
-  }
-  return(cverr)
-}
-cvknnreg()
+    cur_cverr <- mean(cverr)
+    
+    if (cverr_min > cur_cverr){
+      cverr_min <- cur_cverr
+      optimal_mtry <- i
+      optimal_nodesize <- j
+    }
+   }
+    }
 
 ```
 
+## 5.make predictions using the majority vote method, and compute the misclassification rate
+```{r}
+# With the tuned model
+optimal_model <- randomForest(y ~ ., data = vowel.train,mtry = optimal_mtry, nodesize=optimal_nodesize)
+optimal_predict <- predict(optimal_model, vowel.test[,2:11])
+
+
+# result
+misclassification_rate <- 1 - mean(ifelse(vowel.test$y != optimal_predict, FALSE, TRUE))
+misclassification_rate
+
+```
 
 
 
